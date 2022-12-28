@@ -87,3 +87,6 @@ SUBSYSTEMS=="usb", ATTRS{idVendor}=="342d", ATTRS{idProduct}=="dfa0", TAG+="uacc
 
 # AT32 DFU
 SUBSYSTEMS=="usb", ATTRS{idVendor}=="2e3c", ATTRS{idProduct}=="df11", TAG+="uaccess"
+
+# NUMICRO DFU
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="0416", ATTRS{idProduct}=="bdf0", TAG+="uaccess"
