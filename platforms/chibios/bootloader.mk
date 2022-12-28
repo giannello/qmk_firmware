@@ -27,6 +27,7 @@
 #     apm32-dfu    APM32 USB DFU in ROM
 #     wb32-dfu     WB32 USB DFU in ROM
 #     at32-dfu     AT32 USB DFU in ROM
+#     numicro-dfu  NUMICRO USB DFU in ROM
 #     tinyuf2      TinyUF2
 #     rp2040       Raspberry Pi RP2040
 # Current options for RISC-V:
@@ -127,6 +128,15 @@ ifeq ($(strip $(BOOTLOADER)), at32-dfu)
     # Options to pass to dfu-util when flashing
     DFU_ARGS ?= -d 2E3C:DF11 -a 0 -s 0x08000000:leave
     DFU_SUFFIX_ARGS ?= -v 2E3C -p DF11
+endif
+ifeq ($(strip $(BOOTLOADER)), numicro-dfu)
+    OPT_DEFS += -DBOOTLOADER_NUMICRO
+    BOOTLOADER_TYPE = numicro_dfu
+
+    # Options to pass to dfu-util when flashing
+    DFU_ARGS = -R -d 0416:bdf0
+    #DFU_ARGS = -d 1EAF:0003 -a 2 -R
+    #DFU_SUFFIX_ARGS = -v 1EAF -p 0003
 endif
 
 ifeq ($(strip $(BOOTLOADER_TYPE)),)
