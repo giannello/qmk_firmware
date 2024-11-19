@@ -18,6 +18,10 @@
         "scroll_lock": "B8",
         "on_state": 0
     },
+    "dip_switch": {
+        "enabled": true,
+        "pins": ["D0", "D1", "A12", "A13", "A14"]
+    },
     "encoder": {
         "enabled": true,
         "rotary": [
