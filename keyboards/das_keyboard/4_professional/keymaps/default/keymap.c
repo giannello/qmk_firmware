@@ -31,12 +31,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     )
 };
 
-#if defined(ENCODER_MAP_ENABLE)
-const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][2] = {
-    [0] = { ENCODER_CCW_CW(KC_AUDIO_VOL_DOWN, KC_AUDIO_VOL_UP) },
-};
-#endif
-
 #if defined(DIP_SWITCH_ENABLE)
 // Workaround: the keyboard has extra buttons, directly connected to the cpu. As we can't use both them and a matrix,
 // let's configure them as dip switches that send keycodes
@@ -59,3 +53,75 @@ bool dip_switch_update_user(uint8_t index, bool active) {
     return true;
 }
 #endif
+
+static bool lalt_pressed = false;
+static bool lctl_pressed = false;
+static bool lgui_pressed = false;
+
+// Multiple encoder layers
+// Default: volume control
+// Alt: windows switcher (alt-tab)
+// Ctrl: history (ctrl-z/ctrl-shift-z)
+bool encoder_update_user(uint8_t index, bool clockwise) {
+    if (index == 0) { /* First encoder */
+        if (lalt_pressed) {
+            if (clockwise) {
+                tap_code(KC_TAB);
+            } else {
+                register_code(KC_LSFT);
+                tap_code(KC_TAB);
+                unregister_code(KC_LSFT);
+            }
+        } else if (lctl_pressed) {
+            if (clockwise) {
+                register_code(KC_LSFT);
+                tap_code(KC_Z);
+                unregister_code(KC_LSFT);
+            } else {
+                tap_code(KC_Z);
+            }
+        } else if (lgui_pressed) {
+            if (clockwise) {
+                tap_code(KC_GRV);
+            } else {
+                register_code(KC_LSFT);
+                tap_code(KC_GRV);
+                unregister_code(KC_LSFT);
+            }
+        } else {
+            if (clockwise) {
+                tap_code(KC_VOLU);
+            } else {
+                tap_code(KC_VOLD);
+            }
+        }
+    }
+    return false;
+}
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case KC_LALT:
+            if (record->event.pressed) {
+                lalt_pressed = true;
+            } else {
+                lalt_pressed = false;
+            }
+            break;
+        case KC_LCTL:
+            if (record->event.pressed) {
+                lctl_pressed = true;
+            } else {
+                lctl_pressed = false;
+            }
+            break;
+        case KC_LGUI:
+            if (record->event.pressed) {
+                lgui_pressed = true;
+            } else {
+                lgui_pressed = false;
+            }
+            break;
+    }
+    return true;
+};
