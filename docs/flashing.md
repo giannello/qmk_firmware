@@ -498,3 +498,36 @@ CLI Flashing sequence:
 4. Wait for the keyboard to become available
 
 <sup>1</sup>: This works only if the controller has been flashed with QMK Firmware with `RP2040_BOOTLOADER_DOUBLE_TAP_RESET` defined.
+
+## Custom bootloaders
+
+In case your keyboard has a unique/custom bootloader, it can be easily configured.
+
+The `rules.mk` setting for this bootloader is `custom`, and can be specified at the keymap or user level.
+
+To use a custom bootloader, make sure this block is present in your `rules.mk`:
+
+```make
+# Bootloader selection
+BOOTLOADER = custom
+PROGRAM_CMD = flash_command [flash_args] $(BUILD_DIR)/$(TARGET).bin
+```
+
+Do not forget to adjust `PROGRAM_CMD` according to your needs. Example:
+```
+PROGRAM_CMD = annepro2_tools --boot $(BUILD_DIR)/$(TARGET).bin
+```
+
+Compatible flashers:
+
+* Any CLI tool capable of writing a new firmware on your board
+
+Flashing sequence:
+
+1. Enter the bootloader using any of the methods available for your board
+    * Tap the `QK_BOOT` keycode
+    * Hold the `BOOTSEL` button on the PCB while plugging in the USB cable.
+    * Hold a specific combination of keys while plugging in the USB cable
+2. Wait for the OS to detect the device
+3. Flash via QMK CLI eg. `qmk flash --keyboard annepro2/c15 --keymap default`
+4. Wait for the keyboard to become available
