@@ -48,4 +48,28 @@
 
 #define NUC123_MCUCONF
 
+#define NUC123_EFL_USE_EFL1         TRUE
+#define NUC123_EFL_ACCESS_APROM     FALSE  // Do not mix application flash with MFS
+#define NUC123_EFL_ACCESS_DATAFLASH TRUE   // Map EFLD1 exclusively to DataFlash
+
+//#include "hal.h"
+//#include "hal_mfs.h"
+
+// Hardware Configuration: 36 KB DataFlash (72 Sectors total)
+//const MFSConfig mfs_config = {
+//  .flashp        = (BaseFlash *)&EFLD1, 
+//  .erased        = 0xFFFFFFFF,          // NUC123 erased state is 1s
+  
+  // Size of one log swap bank: 18 KB (18432 bytes)
+//  .bank_size     = 18432,                 
+  
+  // MFS Bank 0 maps to Sectors 0 through 35 of DataFlash
+//  .bank0_start   = 0,                   
+//  .bank0_sectors = 36,                  // 36 sectors * 512 bytes = 18432 bytes
+  
+  // MFS Bank 1 maps to Sectors 36 through 71 of DataFlash
+//  .bank1_start   = 36,                  
+//  .bank1_sectors = 36                   // 36 sectors * 512 bytes = 18432 bytes
+//};
+
 #endif /* _MCUCONF_H_ */
